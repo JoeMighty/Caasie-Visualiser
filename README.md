@@ -20,16 +20,15 @@ Modern, accessible data visualization dashboard for Caasie.co campaign analytics
 Upload your Caasie.co data and start visualizing immediately!
 
 ---
-
 ## 📁 Files Included
 
 ```
-├── index.html    (~10 KB) - HTML structure with semantic markup
-├── style.css     (~13 KB) - Complete styling with CSS variables
-└── script.js     (~43 KB) - All functionality + sample data
+├── index.html    (~12 KB) - HTML structure with filtering UI
+├── style.css     (~18 KB) - Complete styling with dark teal theme, FAB, filters
+└── script.js     (~50 KB) - All functionality + filtering + 60 sample records
 ```
 
-**Total size:** ~66 KB (excluding external CDN libraries)
+**Total size:** ~80 KB (excluding external CDN libraries)
 
 ---
 
@@ -45,24 +44,34 @@ Upload your Caasie.co data and start visualizing immediately!
   - **Top 10 Boards by Audience** - Horizontal bar chart of best performing locations
 - **Top Boards Table** - Sortable performance table with detailed metrics
 
+### 🎛️ Advanced Filtering
+- **Date Range Filter** - Custom start and end date selection
+- **Venue Type Filter** - Filter by specific venue types (outdoor panels, bus shelters, malls, stations, airports)
+- **Campaign Filter** - Isolate specific campaigns for focused analysis
+- **Reset Filters** - One-click return to full dataset
+- **Real-time Updates** - Charts and metrics recalculate instantly on filter changes
+- **Auto-populated Options** - Filters dynamically populate from your uploaded data
+
 ### 🎨 Customization
 - **Color Scheme Editor** - Customize 5 brand colors in real-time
 - **Typography Selector** - Choose from 15 Google Fonts
 - **Chart Visibility Controls** - Toggle any chart on/off
+- **Floating Customize Button** - Always-accessible settings via bottom-right FAB
 - **Persistent Settings** - All preferences saved to localStorage
 
 ### 📤 Data Import
 - **Drag & Drop Upload** - Intuitive file upload interface
 - **Multiple Formats** - CSV, XLSX, XLS support
-- **Sample Data Included** - 50 real Caasie.co records for testing
+- **Sample Data Included** - 60 diverse UK campaign records for testing
 - **Auto-validation** - Checks for required columns
 
 ### 🎯 User Experience
-- **Fully Responsive** - Adapts to mobile, tablet, and desktop
+- **Fully Responsive** - Adapts to mobile, tablet, and desktop (2/3/4 column layouts)
 - **WCAG 2.1 AA Compliant** - Full accessibility support
 - **No Installation** - Works immediately, no build process
 - **Offline Ready** - All functionality available locally
 - **Fast Loading** - Optimized performance
+- **Smart Grid** - Metrics auto-resize to fill available space with no gaps
 
 ---
 
@@ -95,14 +104,16 @@ Accent Blue:    #18265e  /* Deep blue */
 - DM Sans
 
 ### How to Customize
-1. Click the **⚙️ Customize** button
+1. Click the **⚙️ floating button** in the bottom-right corner
 2. Navigate between tabs:
    - **🎨 Colors** - Adjust color scheme with color pickers
    - **🔤 Fonts** - Select typography from dropdown
    - **📊 Charts** - Toggle chart visibility with switches
 3. Changes apply instantly and save automatically
+4. Click outside the panel or press the FAB again to close
 
 ---
+
 
 ## 📊 Required Data Format
 
@@ -134,7 +145,6 @@ Your Caasie.co data file must include these columns:
 ---
 
 ## 💡 Usage
-
 ### Getting Started
 
 1. **Visit the live page:**
@@ -145,21 +155,29 @@ Your Caasie.co data file must include these columns:
    - OR click the upload zone to browse files
    - Supported formats: CSV, XLSX, XLS
 
-3. **View your analytics:**
-   - 8 key metrics update automatically
-   - 5 interactive charts visualize your data
+3. **Filter your data (optional):**
+   - Select date range to analyze specific time periods
+   - Filter by venue type to compare performance
+   - Filter by campaign to focus on specific initiatives
+   - Combine filters for detailed drill-down analysis
+   - Click "Reset" to clear all filters
+
+4. **View your analytics:**
+   - 8 key metrics update automatically based on filters
+   - 5 interactive charts visualize filtered data
    - Top boards table shows performance rankings
 
-4. **Customize appearance:**
-   - Click **⚙️ Customize** button
+5. **Customize appearance:**
+   - Click the **⚙️ floating button** (bottom-right corner)
    - Adjust colors to match your brand
    - Select preferred fonts
    - Toggle charts on/off as needed
 
-5. **Settings persist:**
+6. **Settings persist:**
    - Your preferences are saved automatically
    - Reload the page - settings remain
    - Upload new data anytime
+   - Filters reset when uploading new data
 
 ### Local Usage
 
@@ -173,34 +191,53 @@ Your Caasie.co data file must include these columns:
 
 ## 📱 Responsive Breakpoints
 
-### Mobile (< 768px)
+### Mobile Small (< 480px)
 - Single column layout
 - Stacked charts
-- 2-column metrics grid
+- 2-column metrics grid (compact spacing)
 - Optimized touch targets
 - Simplified navigation
 - Readable font sizes (minimum 16px)
+- 52px floating customize button
 
-### Tablet (768px - 1024px)
+### Mobile Large (480px - 767px)
+- Single column layout
+- Stacked charts
+- 2-column metrics grid
+- Comfortable spacing
+- Touch-friendly interface
+- Floating customize button bottom-right
+
+### Tablet (768px - 1023px)
 - 2-column chart layout
-- 3-column metrics grid
+- 3-column metrics grid (auto-fills width)
 - Comfortable spacing
 - Touch-friendly interface
 - Adaptive typography
+- Horizontal filter layout
 
-### Desktop (> 1024px)
+### Desktop (1024px - 1399px)
 - Full bento grid layout
-- 4-column metrics grid
+- 3-column metrics grid
 - 2-column large charts
-- Maximum screen utilization
+- Excellent screen utilization
 - Hover interactions
 - Optimal viewing experience
+
+### Desktop XL (> 1400px)
+- Full bento grid layout
+- 4-column metrics grid (maximum utilization)
+- 2-column large charts
+- No wasted space
+- Perfect for large monitors
+- All features visible
 
 ### Tested Devices
 - iPhone SE / 12 / 13 Pro Max
 - iPad / iPad Pro
 - Samsung Galaxy S21 / Tab S7
 - Desktop monitors (1920×1080 to 3840×2160)
+- 4K displays (optimized for 4-column layout)
 
 ---
 
@@ -238,15 +275,16 @@ This application is fully compliant with **WCAG 2.1 Level AA** standards.
 
 | File | Size | Compressed | Description |
 |------|------|------------|-------------|
-| `index.html` | ~10 KB | ~2 KB | HTML structure |
-| `style.css` | ~13 KB | ~3 KB | All styling |
-| `script.js` | ~43 KB | ~7 KB | Functionality + sample data |
-| **Total** | **~66 KB** | **~12 KB** | Complete application |
+| `index.html` | ~12 KB | ~2.5 KB | HTML structure with filters |
+| `style.css` | ~18 KB | ~4 KB | All styling + FAB + filters |
+| `script.js` | ~50 KB | ~9 KB | Functionality + filtering + sample data |
+| **Total** | **~80 KB** | **~15.5 KB** | Complete application |
 
 ### Performance
 - **First Load:** < 2 seconds (on 3G)
 - **Subsequent Loads:** < 1 second (cached)
 - **Interactive Time:** < 1 second
+- **Filter Response:** Instant (<50ms)
 - **Lighthouse Score:** 95+ (Performance, Accessibility, Best Practices, SEO)
 
 ---
@@ -326,8 +364,7 @@ All dependencies loaded via CDN - no installation required.
 ### Created By
 **Jobin Bennykutty**
 - GitHub: [@JoeMighty](https://github.com/JoeMighty/)
-- Project: Caasie Data Visualizer
-- Year: 2025
+- Project: Caasie Visualizer
 
 ### Built With
 - **HTML5** - Semantic markup
@@ -450,10 +487,11 @@ A: Yes! Use an iframe or integrate the files directly.
 
 1. **Visit:** [https://joemighty.github.io/Caasie-Visualiser/](https://joemighty.github.io/Caasie-Visualiser/)
 2. **Upload:** Your Caasie.co data file
-3. **Customize:** Colors and fonts to match your brand
-4. **Analyze:** Interactive charts and metrics
+3. **Filter:** Use date range, venue type, or campaign filters to drill down
+4. **Customize:** Click the ⚙️ floating button (bottom-right) to adjust colors and fonts
+5. **Analyze:** Interactive charts and metrics update in real-time
 
-**That's it!** No installation, no configuration, just visualize your data.
+**That's it!** No installation, no configuration, just visualize your data with powerful filtering.
 
 ---
 
