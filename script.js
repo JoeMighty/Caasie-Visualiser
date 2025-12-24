@@ -784,6 +784,7 @@ const SAMPLE_DATA = [
 
 // Global State
 let currentData = SAMPLE_DATA;
+let filteredData = SAMPLE_DATA;
 let charts = {};
 let visibleCharts = {
     dailyPerformance: true,
@@ -792,12 +793,19 @@ let visibleCharts = {
     screenTime: true,
     topBoards: true
 };
+let filters = {
+    startDate: null,
+    endDate: null,
+    venueType: 'all',
+    campaign: 'all'
+};
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     setupFileUpload();
     setupSettings();
     setupChartToggles();
+    setupFilters();
     loadSettings();
     updateDashboard(currentData);
 });
@@ -846,7 +854,10 @@ function processFile(file) {
             skipEmptyLines: true,
             complete: (results) => {
                 currentData = results.data.filter(row => row['Total Plays']); // Filter out empty rows
-                updateDashboard(currentData);
+                filteredData = currentData;
+                populateFilterOptions();
+                resetFilters();
+                updateDashboard(filteredData);
             },
             error: (error) => {
                 alert(`Error parsing CSV: ${error.message}`);
@@ -861,7 +872,10 @@ function processFile(file) {
                 const worksheet = workbook.Sheets[workbook.SheetNames[0]];
                 const jsonData = XLSX.utils.sheet_to_json(worksheet);
                 currentData = jsonData;
-                updateDashboard(currentData);
+                filteredData = currentData;
+                populateFilterOptions();
+                resetFilters();
+                updateDashboard(filteredData);
             } catch (error) {
                 alert(`Error parsing Excel: ${error.message}`);
             }
@@ -870,6 +884,125 @@ function processFile(file) {
     } else {
         alert('Please upload a CSV or Excel file (.csv, .xlsx, .xls)');
     }
+}
+
+// ===== FILTERS =====
+
+function setupFilters() {
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
+    const venueTypeSelect = document.getElementById('venueTypeFilter');
+    const campaignSelect = document.getElementById('campaignFilter');
+    const resetButton = document.getElementById('resetFilters');
+
+    // Set up event listeners
+    startDateInput.addEventListener('change', () => {
+        filters.startDate = startDateInput.value;
+        applyFilters();
+    });
+
+    endDateInput.addEventListener('change', () => {
+        filters.endDate = endDateInput.value;
+        applyFilters();
+    });
+
+    venueTypeSelect.addEventListener('change', () => {
+        filters.venueType = venueTypeSelect.value;
+        applyFilters();
+    });
+
+    campaignSelect.addEventListener('change', () => {
+        filters.campaign = campaignSelect.value;
+        applyFilters();
+    });
+
+    resetButton.addEventListener('click', resetFilters);
+
+    // Initialize filter options
+    populateFilterOptions();
+}
+
+function populateFilterOptions() {
+    const venueTypeSelect = document.getElementById('venueTypeFilter');
+    const campaignSelect = document.getElementById('campaignFilter');
+
+    // Get unique venue types
+    const venueTypes = [...new Set(currentData.map(d => d['Venue Type']))].filter(Boolean).sort();
+    venueTypeSelect.innerHTML = '<option value="all">All Venues</option>';
+    venueTypes.forEach(type => {
+        const option = document.createElement('option');
+        option.value = type;
+        option.textContent = type.replace(/_/g, ' ').replace(/\./g, ' - ');
+        venueTypeSelect.appendChild(option);
+    });
+
+    // Get unique campaigns
+    const campaigns = [...new Set(currentData.map(d => d.Campaign))].filter(Boolean).sort();
+    campaignSelect.innerHTML = '<option value="all">All Campaigns</option>';
+    campaigns.forEach(campaign => {
+        const option = document.createElement('option');
+        option.value = campaign;
+        option.textContent = campaign;
+        campaignSelect.appendChild(option);
+    });
+
+    // Set date range based on data
+    if (currentData.length > 0) {
+        const dates = currentData.map(d => d['Date (UTC)']).filter(Boolean).sort();
+        if (dates.length > 0) {
+            document.getElementById('startDate').value = dates[0];
+            document.getElementById('endDate').value = dates[dates.length - 1];
+            filters.startDate = dates[0];
+            filters.endDate = dates[dates.length - 1];
+        }
+    }
+}
+
+function applyFilters() {
+    filteredData = currentData.filter(row => {
+        // Date filter
+        if (filters.startDate && row['Date (UTC)'] < filters.startDate) return false;
+        if (filters.endDate && row['Date (UTC)'] > filters.endDate) return false;
+
+        // Venue type filter
+        if (filters.venueType !== 'all' && row['Venue Type'] !== filters.venueType) return false;
+
+        // Campaign filter
+        if (filters.campaign !== 'all' && row.Campaign !== filters.campaign) return false;
+
+        return true;
+    });
+
+    updateDashboard(filteredData);
+}
+
+function resetFilters() {
+    // Reset filter values
+    filters = {
+        startDate: null,
+        endDate: null,
+        venueType: 'all',
+        campaign: 'all'
+    };
+
+    // Reset UI
+    document.getElementById('venueTypeFilter').value = 'all';
+    document.getElementById('campaignFilter').value = 'all';
+
+    // Reset dates to data range
+    if (currentData.length > 0) {
+        const dates = currentData.map(d => d['Date (UTC)']).filter(Boolean).sort();
+        if (dates.length > 0) {
+            document.getElementById('startDate').value = dates[0];
+            document.getElementById('endDate').value = dates[dates.length - 1];
+            filters.startDate = dates[0];
+            filters.endDate = dates[dates.length - 1];
+        }
+    }
+
+    // Apply filters (which will show all data)
+    filteredData = currentData;
+    updateDashboard(filteredData);
 }
 
 // ===== SETTINGS =====
@@ -1040,11 +1173,11 @@ function applyChartVisibility() {
 
 function resetSettings() {
     localStorage.removeItem('caasieSettings');
-    document.getElementById('colorPrimary').value = '#3bd62b';
-    document.getElementById('colorPrimaryLight').value = '#d6ffd2';
-    document.getElementById('colorDark').value = '#001a23';
-    document.getElementById('colorYellow').value = '#fece00';
-    document.getElementById('colorBlue').value = '#18265e';
+    document.getElementById('colorPrimary').value = '#00ff88';
+    document.getElementById('colorPrimaryLight').value = '#a8ffdb';
+    document.getElementById('colorDark').value = '#0a1f1f';
+    document.getElementById('colorYellow').value = '#ffd700';
+    document.getElementById('colorBlue').value = '#00d4ff';
     document.getElementById('fontFamily').value = 'Poppins';
     
     // Reset chart visibility
